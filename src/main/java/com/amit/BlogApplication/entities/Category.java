@@ -1,9 +1,9 @@
 package com.amit.BlogApplication.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -15,6 +15,9 @@ public class Category {
     private String categoryTitle;
 
     private String categoryDescription;
+
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    private List<Posts>posts = new ArrayList<>();
 
     public Category() {
     }
@@ -41,5 +44,13 @@ public class Category {
 
     public void setCategoryDescription(String categoryDescription) {
         this.categoryDescription = categoryDescription;
+    }
+
+    public List<Posts> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Posts> posts) {
+        this.posts = posts;
     }
 }

@@ -1,9 +1,9 @@
 package com.amit.BlogApplication.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -23,6 +23,9 @@ public class Users {
 
     public Users() {
     }
+
+    @OneToMany(mappedBy = "users",cascade = CascadeType.ALL)
+    private List<Posts> posts = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -62,5 +65,13 @@ public class Users {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    public List<Posts> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Posts> posts) {
+        this.posts = posts;
     }
 }
