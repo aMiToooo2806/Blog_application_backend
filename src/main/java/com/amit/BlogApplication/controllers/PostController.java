@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.PrivateKey;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/")
@@ -23,4 +24,19 @@ public class PostController {
         return new ResponseEntity<PostDto>(createdPost, HttpStatus.CREATED);
     }
 
+    //get posts by user
+    @GetMapping("/user/{userId}/posts")
+    public ResponseEntity<List<PostDto>>getPostsByUser(@PathVariable Integer userId)
+    {
+        List<PostDto> postByUser = this.postService.getPostByUser(userId);
+        return new ResponseEntity<List<PostDto>>(postByUser,HttpStatus.OK);
+    }
+
+    //get posts by category
+    @GetMapping("/category/{categoryId}/posts")
+    public ResponseEntity<List<PostDto>>getPostsByCategory(@PathVariable Integer categoryId)
+    {
+        List<PostDto> postByCategory = this.postService.getPostByCategory(categoryId);
+        return new ResponseEntity<>(postByCategory,HttpStatus.OK);
+    }
 }

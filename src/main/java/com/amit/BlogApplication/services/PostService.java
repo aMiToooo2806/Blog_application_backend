@@ -18,9 +18,9 @@ public interface PostService {
 
     Posts getPostById(Integer postId);
 
-    List<Posts>getPostByCategory(Integer categoryId);
+    List<PostDto>getPostByCategory(Integer categoryId);
 
-    List<Posts>getPostByUser(Integer userId);
+    List<PostDto>getPostByUser(Integer userId);
 
     List<Posts>searchPosts(String keyword);
 }

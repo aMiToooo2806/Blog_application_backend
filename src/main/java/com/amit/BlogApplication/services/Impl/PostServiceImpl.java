@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -65,13 +67,26 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Posts> getPostByCategory(Integer categoryId) {
-        return List.of();
+    public List<PostDto> getPostByCategory(Integer categoryId) {
+        Category category = this.categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Category id", categoryId));
+        List<Posts> byCategory = this.postRepo.findByCategory(category);
+        if (byCategory.isEmpty()) {
+            throw new ResourceNotFoundException("Posts", "category id", categoryId);
+        }
+        List<PostDto> postDtoList = byCategory.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).toList();
+        return postDtoList;
     }
 
     @Override
-    public List<Posts> getPostByUser(Integer userId) {
-        return List.of();
+    public List<PostDto> getPostByUser(Integer userId) {
+        Users user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Users", "User id", userId));
+        List<Posts> userList = this.postRepo.findByUsers(user);
+        if (userList.isEmpty()) {
+            throw new ResourceNotFoundException("Posts", "User id", userId);
+        }
+        List<PostDto> postDtos = userList.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).toList();
+        return postDtos;
     }
 
     @Override
