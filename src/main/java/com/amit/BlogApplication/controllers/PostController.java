@@ -39,4 +39,34 @@ public class PostController {
         List<PostDto> postByCategory = this.postService.getPostByCategory(categoryId);
         return new ResponseEntity<>(postByCategory,HttpStatus.OK);
     }
+    //Get All posts
+
+    @GetMapping("/AllPosts")
+    public ResponseEntity<List<PostDto>>getAllPosts()
+    {
+        List<PostDto> allPosts = this.postService.getAllPosts();
+        return new ResponseEntity<>(allPosts,HttpStatus.OK);
+    }
+
+    //Get post by Id
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostDto>getPostById(@PathVariable Integer postId)
+    {
+        PostDto postById = this.postService.getPostById(postId);
+        return new ResponseEntity<>(postById,HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{postId}")
+    public ResponseEntity<PostDto>updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId)
+    {
+        PostDto UpdatedPost = postService.updatePosts(postDto, postId);
+        return new ResponseEntity<>(UpdatedPost,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<?>deletePost(@PathVariable Integer postId)
+    {
+         return postService.deletePosts(postId);
+
+    }
 }

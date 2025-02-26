@@ -7,6 +7,8 @@ import java.util.Date;
 
 public class PostDto {
 
+    private Integer postId;
+
     private String postTitle;
 
     private String postContent;
@@ -20,6 +22,14 @@ public class PostDto {
     private UserDto users;
 
     public PostDto() {
+    }
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
     }
 
     public String getPostTitle() {

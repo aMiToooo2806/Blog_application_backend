@@ -10,6 +10,8 @@ import com.amit.BlogApplication.repositories.UserRepo;
 import com.amit.BlogApplication.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -47,23 +49,34 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Posts updatePosts(PostDto postDto, Integer postId) {
-        return null;
+    public PostDto updatePosts(PostDto postDto, Integer postId) {
+        Posts post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Posts", "Post Id", postId));
+        post.setPostContent(postDto.getPostContent());
+        post.setPostTitle(postDto.getPostTitle());
+        post.setImageName(postDto.getImageName());
+        Posts updatedPost = postRepo.save(post);
+        return modelMapper.map(updatedPost,PostDto.class);
     }
 
     @Override
-    public void deletePosts(Integer postId) {
-
+    public ResponseEntity<PostDto> deletePosts(Integer postId) {
+        Posts post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Posts", "Post Id", postId));
+        postRepo.delete(post);
+        PostDto dto = modelMapper.map(post, PostDto.class);
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     @Override
-    public List<Posts> getAllPosts() {
-        return List.of();
+    public List<PostDto> getAllPosts() {
+        List<Posts> AllPosts = this.postRepo.findAll();
+        List<PostDto> postDtos = AllPosts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).toList();
+        return postDtos;
     }
 
     @Override
-    public Posts getPostById(Integer postId) {
-        return null;
+    public PostDto getPostById(Integer postId) {
+        Posts post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Posts", "Post Id", postId));
+        return this.modelMapper.map(post,PostDto.class);
     }
 
     @Override
