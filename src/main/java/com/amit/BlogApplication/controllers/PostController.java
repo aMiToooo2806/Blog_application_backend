@@ -42,9 +42,11 @@ public class PostController {
     //Get All posts
 
     @GetMapping("/AllPosts")
-    public ResponseEntity<List<PostDto>>getAllPosts()
+    //http://localhost:8080/api/AllPosts?pageNumber=0&pageSize=4 (For the paging)
+    public ResponseEntity<List<PostDto>>getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber
+    , @RequestParam(value = "pageSize",defaultValue = "4",required = false) Integer pageSize)
     {
-        List<PostDto> allPosts = this.postService.getAllPosts();
+        List<PostDto> allPosts = this.postService.getAllPosts(pageNumber,pageSize);
         return new ResponseEntity<>(allPosts,HttpStatus.OK);
     }
 

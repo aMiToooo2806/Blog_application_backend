@@ -15,7 +15,7 @@ public interface PostService {
 
     ResponseEntity<PostDto> deletePosts(Integer postId);
 
-    List<PostDto>getAllPosts();
+    List<PostDto>getAllPosts(Integer pageNumber, Integer pageSize);
 
     PostDto getPostById(Integer postId);
 
