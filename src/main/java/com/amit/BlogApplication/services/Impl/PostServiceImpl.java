@@ -4,6 +4,7 @@ import com.amit.BlogApplication.entities.Posts;
 import com.amit.BlogApplication.entities.Users;
 import com.amit.BlogApplication.exceptations.ResourceNotFoundException;
 import com.amit.BlogApplication.payloads.PostDto;
+import com.amit.BlogApplication.payloads.PostResponse;
 import com.amit.BlogApplication.repositories.CategoryRepo;
 import com.amit.BlogApplication.repositories.PostRepo;
 import com.amit.BlogApplication.repositories.UserRepo;
@@ -70,13 +71,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
         PageRequest p = PageRequest.of(pageNumber, pageSize);
         Page<Posts> all = this.postRepo.findAll(p);
         List<Posts> AllPosts = all.getContent();
 
         List<PostDto> postDtos = AllPosts.stream().map((post) -> this.modelMapper.map(post, PostDto.class)).toList();
-        return postDtos;
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(all.getNumber());
+        postResponse.setPageSize(all.getSize());
+        postResponse.setTotalElements(all.getTotalElements());
+        postResponse.setTotalPages(all.getTotalPages());
+        postResponse.setLastPage(all.isLast());
+
+        return postResponse;
     }
 
     @Override

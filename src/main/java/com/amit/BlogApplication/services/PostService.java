@@ -2,6 +2,7 @@ package com.amit.BlogApplication.services;
 
 import com.amit.BlogApplication.entities.Posts;
 import com.amit.BlogApplication.payloads.PostDto;
+import com.amit.BlogApplication.payloads.PostResponse;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
 
@@ -15,7 +16,7 @@ public interface PostService {
 
     ResponseEntity<PostDto> deletePosts(Integer postId);
 
-    List<PostDto>getAllPosts(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
     PostDto getPostById(Integer postId);
 

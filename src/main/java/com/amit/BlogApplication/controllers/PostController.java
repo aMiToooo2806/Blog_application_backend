@@ -1,6 +1,7 @@
 package com.amit.BlogApplication.controllers;
 
 import com.amit.BlogApplication.payloads.PostDto;
+import com.amit.BlogApplication.payloads.PostResponse;
 import com.amit.BlogApplication.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,11 +44,11 @@ public class PostController {
 
     @GetMapping("/AllPosts")
     //http://localhost:8080/api/AllPosts?pageNumber=0&pageSize=4 (For the paging)
-    public ResponseEntity<List<PostDto>>getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber
+    public ResponseEntity<PostResponse>getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber
     , @RequestParam(value = "pageSize",defaultValue = "4",required = false) Integer pageSize)
     {
-        List<PostDto> allPosts = this.postService.getAllPosts(pageNumber,pageSize);
-        return new ResponseEntity<>(allPosts,HttpStatus.OK);
+        PostResponse allPosts = this.postService.getAllPosts(pageNumber, pageSize);
+        return new ResponseEntity<PostResponse>(allPosts,HttpStatus.OK);
     }
 
     //Get post by Id
