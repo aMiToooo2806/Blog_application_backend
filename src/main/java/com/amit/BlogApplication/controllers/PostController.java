@@ -3,14 +3,15 @@ package com.amit.BlogApplication.controllers;
 import com.amit.BlogApplication.payloads.PostDto;
 import com.amit.BlogApplication.payloads.PostResponse;
 import com.amit.BlogApplication.services.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PrivateKey;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/")
 public class PostController {
@@ -21,7 +22,10 @@ public class PostController {
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<PostDto>createPost(@RequestBody PostDto postDto, @PathVariable Integer userId,@PathVariable Integer categoryId)
     {
+        log.info("POST /api/posts/user/{}/category/{} called", userId, categoryId);
         PostDto createdPost = this.postService.createPosts(postDto, userId, categoryId);
+        log.info("Post created successfully with id={}", createdPost.getPostId());
+
         return new ResponseEntity<PostDto>(createdPost, HttpStatus.CREATED);
     }
 

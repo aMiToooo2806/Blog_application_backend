@@ -3,13 +3,17 @@ package com.amit.BlogApplication.services.Impl;
 import com.amit.BlogApplication.entities.Users;
 import com.amit.BlogApplication.exceptations.ResourceNotFoundException;
 import com.amit.BlogApplication.payloads.UserDto;
+import com.amit.BlogApplication.repositories.RoleRepo;
 import com.amit.BlogApplication.repositories.UserRepo;
 import com.amit.BlogApplication.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.amit.BlogApplication.entities.Role;
+
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,11 +23,23 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
 
     @Autowired
+    private RoleRepo roleRepo;
+
+    @Autowired
     private ModelMapper modelMapper;
+
+    private static final String ROLE_USER = "ROLE_USER";
 
     @Override
     public UserDto createUser(UserDto userDto) {
         Users user = this.dtoToUser(userDto);
+
+        // ✅ IMPORTANT: assign default role to every created user
+        Role roleUser = this.roleRepo.findByName(ROLE_USER)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "name", ROLE_USER));
+
+        user.getRoles().add(roleUser);
+
         Users savedUser = this.userRepo.save(user);
         return this.userToDto(savedUser);
 
@@ -71,9 +87,17 @@ public class UserServiceImpl implements UserService {
 
         return modelMapper.map(userDto,Users.class);
     }
-    public UserDto userToDto(Users users)
-    {
 
-        return modelMapper.map(users,UserDto.class);
+    public UserDto userToDto(Users users) {
+        UserDto dto = modelMapper.map(users, UserDto.class);
+
+        // ✅ manual mapping for roles
+        Set<String> roles = users.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet());
+
+        dto.setRoles(roles);
+
+        return dto;
     }
 }

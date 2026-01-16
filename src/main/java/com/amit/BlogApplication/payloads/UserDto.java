@@ -1,10 +1,13 @@
 package com.amit.BlogApplication.payloads;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDto {
     private int id;
@@ -19,11 +22,21 @@ public class UserDto {
 
     @NotEmpty
     @Size(min = 5,max = 11,message = "Password should be more than 5 characters and less than 11 characters")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @NotEmpty
-
     private String about;
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
+    private Set<String> roles = new HashSet<>();
 
     public UserDto() {
     }
