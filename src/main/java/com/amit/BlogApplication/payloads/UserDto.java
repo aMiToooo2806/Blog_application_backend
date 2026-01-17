@@ -14,7 +14,7 @@ public class UserDto {
 
     @NotEmpty
     @Size(min = 2,message = "Username must be min of 2 characters..!")
-    private String name;
+    private String username;
 
     @NotEmpty
     @Email(message = "Email address is not valid..!")
@@ -49,12 +49,12 @@ public class UserDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

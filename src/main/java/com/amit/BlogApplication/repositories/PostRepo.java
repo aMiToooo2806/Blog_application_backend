@@ -13,4 +13,5 @@ public interface PostRepo extends JpaRepository<Posts,Integer> {
 
     List<Posts> findByUsers(Users users);
     List<Posts> findByCategory(Category category);
+    boolean existsByPostIdAndUsers_Username(Integer postId, String username);
 }

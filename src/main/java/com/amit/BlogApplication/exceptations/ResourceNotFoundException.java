@@ -1,9 +1,14 @@
 package com.amit.BlogApplication.exceptations;
 
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
 public class ResourceNotFoundException extends RuntimeException {
+    @Setter
     String resourceName;
+    @Setter
     String fieldName;
     Object fieldValue;
 
@@ -12,26 +17,6 @@ public class ResourceNotFoundException extends RuntimeException {
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
-
-    public Object getFieldValue() {
-        return fieldValue;
     }
 
     public void setFieldValue(long fieldValue) {

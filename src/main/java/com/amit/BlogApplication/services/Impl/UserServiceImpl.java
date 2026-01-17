@@ -8,6 +8,7 @@ import com.amit.BlogApplication.repositories.UserRepo;
 import com.amit.BlogApplication.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.amit.BlogApplication.entities.Role;
 
@@ -28,13 +29,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private static final String ROLE_USER = "ROLE_USER";
 
     @Override
     public UserDto createUser(UserDto userDto) {
         Users user = this.dtoToUser(userDto);
 
-        // ✅ IMPORTANT: assign default role to every created user
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // assign default role to every created user
         Role roleUser = this.roleRepo.findByName(ROLE_USER)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "name", ROLE_USER));
 
@@ -50,9 +56,9 @@ public class UserServiceImpl implements UserService {
         Users users = this.userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Users","id",userId));
 
-        users.setName(userDto.getName());
+        users.setUsername(userDto.getUsername());
         users.setEmail(userDto.getEmail());
-        users.setPassword(userDto.getPassword());
+        users.setPassword(passwordEncoder.encode(userDto.getPassword()));
         users.setAbout(userDto.getAbout());
 
         Users updatedUser = this.userRepo.save(users);
