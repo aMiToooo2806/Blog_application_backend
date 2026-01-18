@@ -1,5 +1,7 @@
 package com.amit.BlogApplication.config;
 
+import com.amit.BlogApplication.exceptations.securityExceptationHandling.CustomAccessDeniedHandler;
+import com.amit.BlogApplication.exceptations.securityExceptationHandling.CustomAuthenticationEntryPoint;
 import com.amit.BlogApplication.filters.JwtAuthFilter;
 import com.amit.BlogApplication.services.Impl.CustomeUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,13 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
 
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
@@ -39,6 +48,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/categories/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
+        );
+        // for our custom exception for wrong token and invalid access to endpoints that you shouldn't.
+        http.exceptionHandling(ex -> ex
+                .accessDeniedHandler(customAccessDeniedHandler)
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
         );
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
