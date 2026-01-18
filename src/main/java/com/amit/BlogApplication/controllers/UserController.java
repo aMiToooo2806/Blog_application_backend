@@ -3,7 +3,6 @@ package com.amit.BlogApplication.controllers;
 import com.amit.BlogApplication.payloads.UserDto;
 import com.amit.BlogApplication.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +14,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    @Autowired
+
+
     private UserService userService;
+    //constructor injection
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/create")
@@ -51,7 +55,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ADMIN') OR @userSecurity.isOwner(#userId)")
     @GetMapping("ById/{userId}")
-    private ResponseEntity<UserDto>getUserById(@PathVariable Integer userId)
+    public ResponseEntity<UserDto>getUserById(@PathVariable Integer userId)
     {
         UserDto userById = this.userService.getUserById(userId);
         return ResponseEntity.ok(userById);
